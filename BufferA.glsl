@@ -37,12 +37,20 @@ vec3 RandomUnitVector(inout uint State)
     return(Result);
 }
 
+struct material_info
+{
+    vec3 Albedo;
+    vec3 Emissive;
+    float PercentSpecular;
+    float Roughness;
+    vec3 SpecularColor;
+};
+
 struct ray_hit_info
 {
     float t;
     vec3 Normal;
-    vec3 Albedo;
-    vec3 Emissive;
+    material_info Material;
 };
     
 float ScalarTriple(vec3 A, vec3 B, vec3 C)
@@ -181,8 +189,11 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3(-12.6f,  12.6f, 25.0f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.7f, 0.7f, 0.7f);
-            HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Albedo = vec3(0.7f, 0.7f, 0.7f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }
 	}    
     
@@ -194,8 +205,11 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3(-12.6f, -12.45f, 15.0f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.7f, 0.7f, 0.7f);
-            HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Albedo = vec3(0.7f, 0.7f, 0.7f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }        
     }
     
@@ -207,8 +221,11 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3(-12.6f, 12.5f, 15.0f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.7f, 0.7f, 0.7f);
-            HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Albedo = vec3(0.7f, 0.7f, 0.7f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }        
     }    
     
@@ -220,8 +237,11 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3(-12.5f,  12.6f, 25.0f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.7f, 0.1f, 0.1f);
-            HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Albedo = vec3(0.7f, 0.1f, 0.1f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }        
     }
     
@@ -233,8 +253,11 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3( 12.5f,  12.6f, 25.0f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.1f, 0.7f, 0.1f);
-            HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Albedo = vec3(0.1f, 0.7f, 0.1f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }        
     }    
     
@@ -246,28 +269,87 @@ void TestSceneTrace(in vec3 RayPosition, in vec3 RayDir, inout ray_hit_info HitI
         vec3 D = vec3(-5.0f, 12.4f,  17.5f) + SceneTranslation;
         if(TestQuadRay(RayPosition, RayDir, HitInfo, A, B, C, D))
         {
-            HitInfo.Albedo = vec3(0.0f, 0.0f, 0.0f);
-            HitInfo.Emissive = vec3(1.0f, 0.9f, 0.7f) * 20.0f;
+            HitInfo.Material.Albedo = vec3(0.0f, 0.0f, 0.0f);
+            HitInfo.Material.Emissive = vec3(1.0f, 0.9f, 0.7f) * 20.0f;
+            HitInfo.Material.PercentSpecular = 0.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.0f, 0.0f, 0.0f);
         }        
     }
     
 	if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(-9.0f, -9.5f, 20.0f, 3.0f)+SceneTranslation4))
     {
-        HitInfo.Albedo = vec3(0.9f, 0.9f, 0.75f);
-        HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+        HitInfo.Material.Albedo = vec3(0.9f, 0.9f, 0.5f);
+        HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+        HitInfo.Material.PercentSpecular = 0.1f;
+        HitInfo.Material.Roughness = 0.2f;
+        HitInfo.Material.SpecularColor = vec3(0.9f, 0.9f, 0.9f);     
     } 
     
 	if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(0.0f, -9.5f, 20.0f, 3.0f)+SceneTranslation4))
     {
-        HitInfo.Albedo = vec3(0.9f, 0.75f, 0.9f);
-        HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+        HitInfo.Material.Albedo = vec3(0.9f, 0.5f, 0.9f);
+        HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);   
+        HitInfo.Material.PercentSpecular = 0.3f;
+        HitInfo.Material.Roughness = 0.2;
+        HitInfo.Material.SpecularColor = vec3(0.9f, 0.9f, 0.9f);       
     }    
     
 	if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(9.0f, -9.5f, 20.0f, 3.0f)+SceneTranslation4))
     {
-        HitInfo.Albedo = vec3(0.75f, 0.9f, 0.9f);
-        HitInfo.Emissive = vec3(0.0f, 0.0f, 0.0f);
-    }    
+        HitInfo.Material.Albedo = vec3(0.0f, 0.0f, 1.0f);
+        HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);
+        HitInfo.Material.PercentSpecular = 0.5f;
+        HitInfo.Material.Roughness = 0.4f;
+        HitInfo.Material.SpecularColor = vec3(1.0f, 0.0f, 0.0f);
+    }  
+    
+    {
+        if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(-10.0f, 0.0f, 23.0f, 1.75f)+SceneTranslation4))
+        {
+            HitInfo.Material.Albedo = vec3(1.0f, 1.0f, 1.0f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+            HitInfo.Material.PercentSpecular = 1.0f;
+            HitInfo.Material.Roughness = 0.0f;
+            HitInfo.Material.SpecularColor = vec3(0.3f, 1.0f, 0.3f);       
+        }     
+        
+        if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(-5.0f, 0.0f, 23.0f, 1.75f)+SceneTranslation4))
+        {
+            HitInfo.Material.Albedo = vec3(1.0f, 1.0f, 1.0f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+            HitInfo.Material.PercentSpecular = 1.0f;
+            HitInfo.Material.Roughness = 0.25f;
+            HitInfo.Material.SpecularColor = vec3(0.3f, 1.0f, 0.3f);
+        }            
+        
+        if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(0.0f, 0.0f, 23.0f, 1.75f)+SceneTranslation4))
+        {
+            HitInfo.Material.Albedo = vec3(1.0f, 1.0f, 1.0f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+            HitInfo.Material.PercentSpecular = 1.0f;
+            HitInfo.Material.Roughness = 0.5f;
+            HitInfo.Material.SpecularColor = vec3(0.3f, 1.0f, 0.3f);
+        }            
+        
+        if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(5.0f, 0.0f, 23.0f, 1.75f)+SceneTranslation4))
+        {
+            HitInfo.Material.Albedo = vec3(1.0f, 1.0f, 1.0f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+            HitInfo.Material.PercentSpecular = 1.0f;
+            HitInfo.Material.Roughness = 0.75f;
+            HitInfo.Material.SpecularColor = vec3(0.3f, 1.0f, 0.3f);
+        }        
+        
+        if(TestSphereRay(RayPosition, RayDir, HitInfo, vec4(10.0f, 0.0f, 23.0f, 1.75f)+SceneTranslation4))
+        {
+            HitInfo.Material.Albedo = vec3(1.0f, 1.0f, 1.0f);
+            HitInfo.Material.Emissive = vec3(0.0f, 0.0f, 0.0f);        
+            HitInfo.Material.PercentSpecular = 1.0f;
+            HitInfo.Material.Roughness = 1.0f;
+            HitInfo.Material.SpecularColor = vec3(0.3f, 1.0f, 0.3f);
+        }           
+    }
 }
 
 vec3 GetColorForRay(in vec3 StartRayPosition, in vec3 StartRayDir, inout uint RNGState)
@@ -285,15 +367,29 @@ vec3 GetColorForRay(in vec3 StartRayPosition, in vec3 StartRayDir, inout uint RN
         
         if(HitInfo.t == MaxRayHitTime)
         {
-         	ResultColor += texture(iChannel1, RayDir).rgb * ThroughputColor;
+         	ResultColor += 0.5f*SRGBToLinear(texture(iChannel1, RayDir).rgb) * ThroughputColor;
             break;
         }
         
         RayPosition = (RayPosition + HitInfo.t*RayDir) + NormalNudge*HitInfo.Normal;
-        RayDir = normalize(HitInfo.Normal + RandomUnitVector(RNGState));
         
-        ResultColor += HitInfo.Emissive * ThroughputColor;
-        ThroughputColor *= HitInfo.Albedo;
+        float DoSpecular = (RandomFloat01(RNGState) < HitInfo.Material.PercentSpecular) ? 1.0f : 0.0f;
+        
+        vec3 DiffuseRayDir = normalize(HitInfo.Normal + RandomUnitVector(RNGState));
+        vec3 SpecularRayDir = reflect(RayDir, HitInfo.Normal);
+        SpecularRayDir = normalize(mix(SpecularRayDir, DiffuseRayDir, HitInfo.Material.Roughness*HitInfo.Material.Roughness));
+        RayDir = mix(DiffuseRayDir, SpecularRayDir, DoSpecular);
+        
+        ResultColor += HitInfo.Material.Emissive * ThroughputColor;
+        ThroughputColor *= mix(HitInfo.Material.Albedo, HitInfo.Material.SpecularColor, DoSpecular);
+        
+        {
+            float P = max(ThroughputColor.r, max(ThroughputColor.g, ThroughputColor.b));
+            if(RandomFloat01(RNGState) > P)
+                break;
+            
+            ThroughputColor *= 1.0f / P;
+        }
     }
     
     return(ResultColor);
@@ -301,22 +397,25 @@ vec3 GetColorForRay(in vec3 StartRayPosition, in vec3 StartRayDir, inout uint RN
 
 void mainImage(out vec4 FragColor, in vec2 FragCoord)
 {
+    uint RNGState = uint(uint(FragCoord.x) * uint(1973) + uint(FragCoord.y) * uint(9277) + uint(iFrame) * uint(26699)) | uint(1);
+    
     vec3 RayPosition = vec3(0.0f, 0.0f, 0.0f);
     float CameraDistance = 1.0f / tan(0.5f*FoVDegrees * PI / 180.0f);
-    vec3 RayTarget = vec3(2.0f*(FragCoord/iResolution.xy) - 1.0f, CameraDistance);
+    
+    vec2 Jitter = vec2(RandomFloat01(RNGState), RandomFloat01(RNGState)) - vec2(0.5f, 0.5f);
+    vec3 RayTarget = vec3(2.0f*((FragCoord+Jitter)/iResolution.xy) - 1.0f, CameraDistance);
     float AspectRatio = iResolution.x / iResolution.y;
     RayTarget.y /= AspectRatio;
-	vec3 RayDir = normalize(RayTarget - RayPosition);
     
-    uint RNGState = uint(uint(FragCoord.x) * uint(1973) + uint(FragCoord.y) * uint(9277) + uint(iFrame) * uint(26699)) | uint(1);
+	vec3 RayDir = normalize(RayTarget - RayPosition);
     
     // Raytrace for this pixel
     vec3 Color = vec3(0.0f, 0.0f, 0.0f);
-	for(int Index = 0; Index < 3; Index++)
+	for(int Index = 0; Index < 1; Index++)
     {
      	Color += GetColorForRay(RayPosition, RayDir, RNGState);   
     }
-	Color /= 2.0;    
+	Color /= 1.0;    
     
     
     vec3 LastFrameColor = texture(iChannel0, FragCoord / iResolution.xy).rgb;
